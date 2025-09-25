@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gec.dao.DeptMapper">
+    
+    <!-- 检查部门是否存在子部门 -->
+    <select id="hasSubDept" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(*) from tbl_dept where parent_id = #{deptId}
+    </select>
+    
+    <!-- 检查部门是否有用户 -->
+    <select id="hasUser" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(*) from tbl_user where dept_id = #{deptId}
+    </select>
+    
+    <!-- 获取部门的层级深度 -->
+    <select id="getDeptLevel" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select LENGTH(p_ids) - LENGTH(REPLACE(p_ids, ',', '')) as level from tbl_dept where id = #{deptId}
+    </select>
+    
+    <!-- 根据ID获取部门信息 -->
+    <select id="getDeptById" parameterType="java.lang.Integer" resultType="com.gec.domain.entity.Dept">
+        select * from tbl_dept where id = #{deptId}
+    </select>
+</mapper>
