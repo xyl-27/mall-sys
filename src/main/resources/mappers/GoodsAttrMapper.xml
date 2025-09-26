@@ -5,31 +5,30 @@
 
 <mapper namespace="com.gec.dao.GoodsAttrMapper">
 
-    <!--
-    if(att.attr_type=1, '基本属性','销售属性') attr_type_name
-    -->
+    <!-- 查询商品属性列表 -->
     <select id="getGoodsAttrList" resultMap="attrBOMap">
         SELECT att.*, RA.attr_group_id, g.group_name
-            FROM tbl_goods_attr att
-            LEFT JOIN tbl_group_attr_relation RA
-                ON RA.attr_id=att.id
-            LEFT JOIN tbl_goods_attr_group g
-                ON ra.attr_group_id=g.id
-            WHERE 1=1
-            <if test="param.categoryId != null">
-                AND att.category_id=#{param.categoryId}
-            </if>
-            <if test="param.attrType != null">
-                AND att.attr_type=#{param.attrType}
-            </if>
-            <if test="param.id != null">
-                AND att.id=#{param.id}
-            </if>
-            <if test="param.attrName != null and param.attrName != ''">
-                AND att.attr_name like concat('%', #{param.attrName}, '%')
-            </if>
+        FROM tbl_goods_attr att
+        LEFT JOIN tbl_group_attr_relation RA
+        ON RA.attr_id = att.id
+        LEFT JOIN tbl_goods_attr_group g
+        ON RA.attr_group_id = g.id
+        WHERE 1=1
+        <if test="param.categoryId != null">
+            AND att.category_id = #{param.categoryId}
+        </if>
+        <if test="param.attrType != null">
+            AND att.attr_type = #{param.attrType}
+        </if>
+        <if test="param.id != null">
+            AND att.id = #{param.id}
+        </if>
+        <if test="param.attrName != null and param.attrName != ''">
+            AND att.attr_name like concat('%', #{param.attrName}, '%')
+        </if>
     </select>
 
+    <!-- GoodsAttrBO 映射 -->
     <resultMap id="attrBOMap" type="com.gec.domain.bo.GoodsAttrBO">
         <id column="id" property="id"/>
         <result column="attr_name" property="attrName"/>
@@ -44,48 +43,48 @@
         <result column="group_name" property="groupName"/>
     </resultMap>
 
+    <!-- 根据属性ID获取属性值 -->
     <select id="getAttrValByAttrId" resultType="com.gec.domain.entity.GoodsAttrValue">
-        select * from tbl_goods_attr_value val
-        where
-        <choose>
-            <when test="ids!=null and ids.size()>0">
-                val.attr_id in
-                (
-                <foreach collection="ids" separator="," item="tId">
-                    #{ tId }
+        SELECT * FROM tbl_goods_attr_value val
+        <where>
+            <if test="ids != null and ids.size() > 0">
+                val.attr_id IN
+                <foreach collection="ids" item="tId" open="(" separator="," close=")">
+                    #{tId}
                 </foreach>
-                )
-            </when>
-            <otherwise>
-                1 > 1
-            </otherwise>
-        </choose>
+            </if>
+        </where>
     </select>
 
+    <!-- 添加属性值 -->
     <insert id="addGoodsAttrVal">
-        insert into
-            tbl_goods_attr_value
+        INSERT INTO tbl_goods_attr_value
             (id, spu_id, attr_id, value_type, attr_value)
-        values(null,null,#{id},#{valueType},#{attrValue});
+        VALUES (NULL, NULL, #{attrId}, #{valueType}, #{attrValue});
     </insert>
 
-    <!--
-    int setRelation(
-        Integer id, Integer attrGroupId
-    );
-    -->
+    <!-- 删除属性值 -->
+    <delete id="removeGoodsAttrVal">
+        DELETE FROM tbl_goods_attr_value
+        WHERE attr_id = #{attrId};
+    </delete>
+
+    <!-- 设置属性与分组关系 -->
     <insert id="setRelation">
-        insert into
-            tbl_group_attr_relation
-            (attr_group_id, attr_id)
-        values(#{attrGroupId}, #{attrId});
+        INSERT INTO tbl_group_attr_relation (attr_group_id, attr_id)
+        VALUES (#{attrGroupId}, #{attrId});
     </insert>
 
-    <!--
-    void removeAttrVal(Integer id);
-    -->
-    <delete id="removeAttrVal">
-        delete from tbl_goods_attr_value where attr_id = #{id};
+    <!-- 添加属性分组关系 -->
+    <insert id="addGroupAttrRelation">
+        INSERT INTO tbl_group_attr_relation (attr_group_id, attr_id)
+        VALUES (#{attrGroupId}, #{attrId});
+    </insert>
+
+    <!-- 删除属性分组关系 -->
+    <delete id="removeGroupAttrRelation">
+        DELETE FROM tbl_group_attr_relation
+        WHERE attr_id = #{attrId};
     </delete>
 
 </mapper>

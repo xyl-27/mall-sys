@@ -15,10 +15,6 @@ public interface ICategoryService
     String getPids(Integer id);
 
     void associateBrand(CategoryBrandVO cbVO);
-    
-    // 检查类别是否可以删除（是否有关联的子类别或品牌或商品）
-    boolean canDeleteCategory(Integer categoryId);
-    
-    // 删除类别
-    void deleteCategory(Integer categoryId);
+
+    Boolean removeCategoryById(Integer id);
 }

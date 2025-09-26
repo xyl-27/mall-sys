@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gec.domain.bo.GoodsAttrBO;
 import com.gec.domain.entity.GoodsAttr;
+import com.gec.domain.vo.GoodsAttrVO;
 
 import java.util.Map;
 
@@ -13,8 +14,10 @@ public interface IGoodsAttrService
 
     IPage<GoodsAttrBO> listGoodsAttr(
             Page page, Map<String, Object> data);
-    void addGoodsAttr(GoodsAttr goodsAttr);
-    void updateGoodsAttr(GoodsAttr goodsAttr);
+    void addGoodsAttr(GoodsAttrVO goodsAttrVO);
+
+
+    void updateGoodsAttr(GoodsAttrVO goodsAttrVO);
     void deleteGoodsAttr(Integer id);
 
 }

@@ -13,7 +13,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
-          <entry name="$PROJECT_DIR$/../../../../src/application/maven/repository/org/projectlombok/lombok/1.18.28/lombok-1.18.28.jar" />
+          <entry name="D:/apache-maven-3.9.10-bin/MAVEN—local repository/org/projectlombok/lombok/1.18.28/lombok-1.18.28.jar" />
         </processorPath>
         <module name="mall-sys" />
       </profile>

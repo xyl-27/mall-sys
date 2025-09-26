@@ -21,14 +21,11 @@ public class GoodsImages extends BaseEntity {
     private String imgUrl;
     private Integer imgSort;
     private Integer defaultImg;
-    
-    // 排除父类中的日期字段，因为数据库表中不存在这些字段
-    @TableField(exist = false)
-    private LocalDateTime createDateTime;
 
     @TableField(exist = false)
-    private LocalDateTime updateDateTime;
+    private LocalDateTime localCreateDate;
 
-
+    @TableField(exist = false)
+    private LocalDateTime localUpdateDate;
 
 }

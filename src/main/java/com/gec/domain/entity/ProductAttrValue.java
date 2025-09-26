@@ -23,9 +23,9 @@ public class ProductAttrValue extends BaseEntity {
     private Integer quickShow;
 
     @TableField(exist = false)
-    private LocalDateTime createDateTime;
+    private LocalDateTime localCreateDate;
 
     @TableField(exist = false)
-    private LocalDateTime updateDateTime;
+    private LocalDateTime localUpdateDate;
 
 }

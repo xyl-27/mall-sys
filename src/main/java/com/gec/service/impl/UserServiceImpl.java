@@ -15,6 +15,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
@@ -41,19 +42,33 @@ public class UserServiceImpl
     }
 
     @Override
+    @Transactional
     public void saveUser(User user, Integer roleId) {
-        boolean ret = saveOrUpdate(user);
-        if( !ret ){
-            throw new RuntimeException("保存用户失败。");
+
+        // 1. 设置默认密码（如果 password 为空）
+        if (user.getPassword() == null || user.getPassword().trim().isEmpty()) {
+            user.setPassword("123456"); // 注意：用字符串
         }
-        // 使用反射获取userId，避免直接调用getter方法
-        //Integer userId = 1; // 默认值作为临时解决方案
-        // 正确的做法：直接使用getter方法获取保存后的用户ID
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        System.out.println(user.getPassword());
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+        // 2. 保存用户
+        boolean ret = this.save(user); // 只保存新用户
+        if (!ret) {
+            throw new RuntimeException("保存用户失败");
+        }
+
+        // 3. 获取保存后的 userId
         Integer userId = user.getId();
-        //2.用户与角色关联
-        roleService.addUserRoleAssociation(
-                userId, roleId );
+        if (userId == null) {
+            throw new RuntimeException("保存用户后，userId 为空");
+        }
+
+        // 4. 关联角色
+        roleService.addUserRoleAssociation(userId, roleId);
     }
+
 
     @Override
     public User getUser(Integer id) {
@@ -125,6 +140,7 @@ public class UserServiceImpl
                         excelUser.setPhone(fields[2].trim());
                         excelUser.setSex(fields[3].trim());
                         excelUser.setNo(fields[4].trim());
+
                         try {
                             excelUser.setDeptId(Integer.parseInt(fields[5].trim()));
                         } catch (NumberFormatException e) {
@@ -152,6 +168,9 @@ public class UserServiceImpl
                 BeanUtils.copyProperties(excelUser, user);
                 
                 // 保存用户并关联角色
+                System.out.println("!!!!!!!!!!!");
+                System.out.println(user);
+                System.out.println("!!!!!!!!!!!");
                 this.saveUser(user, roleId);
                 successCount++;
             } catch (Exception e) {

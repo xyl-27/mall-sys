@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.gec.dao.AttrGroupMapper">
-    
+
     <!-- 查询属性分组列表 -->
     <select id="getAttrGroupList" resultMap="attrGroupBOMap">
         SELECT g.*

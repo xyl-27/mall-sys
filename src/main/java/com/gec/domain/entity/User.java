@@ -16,5 +16,6 @@ public class User extends BaseEntity {
     private String sex;
     private String no;
     private Integer deptId;
+    private String password;
 
 }

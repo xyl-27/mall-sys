@@ -3,19 +3,20 @@ package com.gec.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.gec.domain.bo.AttrGroupBO;
-import com.gec.domain.entity.AttrGroup;
+import com.gec.domain.bo.GoodsAttrBO;
+import com.gec.domain.entity.GoodsAttrGroup;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.Map;
 
 public interface IAttrGroupService
-        extends IService<AttrGroup> {
+        extends IService<GoodsAttrGroup> {
 
-    IPage<AttrGroupBO> listAttrGroup(Page page, Map<String, Object> data);
+    IPage listAttrGroup(@Param("page") Page<GoodsAttrBO> page, @Param("param") Map<String, Object> data);
 
-    void addAttrGroup(AttrGroup attrGroup);
-    
-    void updateAttrGroup(AttrGroup attrGroup);
-    
-    void deleteAttrGroup(Integer id);
+    void addAttrGroup(GoodsAttrGroup attrGroup);
+
+    void updateAttrGroup(GoodsAttrGroup attrGroup);
+
+    void deleteById(Integer id);
 }

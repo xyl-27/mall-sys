@@ -45,39 +45,11 @@ public class GoodsAttrBO extends BaseEntity {
     }
 
     public void setAttrValue(GoodsAttrValue val) {
-        // 使用默认值避免直接调用GoodsAttrValue类的getter方法
-        this.valueType = 1; // 默认设为单值
-        this.valueTypeName = "单值";
-        this.attrValue = "Default Value";
+        this.valueType = val.getValueType();
+        this.valueTypeName = (valueType==1) ? "单值" : "多值";
+        this.attrValue = val.getAttrValue();
         System.out.printf("type:%s, value:%s\n",
                 valueTypeName, attrValue);
     }
 
 }
-
-/*
-    //有了映射器, 以下构造器可以废除..
-//    public GoodsAttrBO(GoodsAttr attr) {
-//        this.id = attr.getId();
-//        this.attrType = attr.getAttrType();
-//        this.attrName = attr.getAttrName();
-//        this.attrTypeName = (attrType==1) ? "基本属性" : "销售属性";
-//        this.enable = attr.getEnable();
-//        this.searchEnable = attr.getSearchEnable();
-//        this.categoryId = attr.getCategoryId();
-//    }
-
-    select
-        att.*, val.attr_value,
-        if(att.attr_type=1, '基本属性','销售属性') attr_type_name,
-        if(val.value_type=1, '单值','多值') value_type_name
-    from tbl_goods_attr att
-    left join tbl_goods_attr_value val
-    on att.id = val.attr_id
-    where att.category_id=11;
-
-    表头格式:
-    +----+-----------+-------------+-----------+---------------+--------+----------------+----------------+-----------------+
-    | id | attr_name | category_id | attr_type | search_enable | enable | attr_value     | attr_type_name | value_type_name |
-    +----+-----------+-------------+-----------+---------------+--------+----------------+----------------+-----------------+
-* */

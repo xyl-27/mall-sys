@@ -18,7 +18,25 @@
         )
     </delete>
 
+    <select id="listCategory" resultType="BrandVO">
+        select b.*, t_bc.brand_id,
+               CASE
+                   WHEN t_bc.brand_id is NULL THEN 0
+                   ELSE 1
+                   END isAssociate
+        from tbl_brand b
+                 left join
+             (
+                 select bc.brand_id from tbl_brand_category bc
+                 where bc.category_id=#{categoryId}
+             ) t_bc
+             on b.id = t_bc.brand_id
+    </select>
 
+    <delete id="deleteById">
+        delete from tbl_goods_category
+        where id = #{id}
+    </delete>
     <!-- 实现类别与品牌间的关联关系（以类别为视角） -->
     <insert id="associateBrand">
         INSERT INTO tbl_brand_category

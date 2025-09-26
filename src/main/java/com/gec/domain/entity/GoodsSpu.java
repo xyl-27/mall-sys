@@ -14,7 +14,7 @@ public class GoodsSpu {
     private String goodsDetails;
     private String categoryId;
     private String brandId;
-    private String weight;
+    private Double weight;
     private String createDate;
     private String updateDate;
 }

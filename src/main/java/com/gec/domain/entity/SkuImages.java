@@ -21,9 +21,9 @@ public class SkuImages extends BaseEntity {
     private Integer defaultImg;
 
     @TableField(exist = false)
-    private LocalDateTime createDateTime;
+    private LocalDateTime localCreateDate;
 
     @TableField(exist = false)
-    private LocalDateTime updateDateTime;
+    private LocalDateTime localUpdateDate;
 
 }

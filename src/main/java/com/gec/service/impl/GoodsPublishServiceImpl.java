@@ -99,11 +99,35 @@ public class GoodsPublishServiceImpl implements IGoodsPublishService {
         GoodsInfo goodsInfo = new GoodsInfo();
         goodsInfo.setSpuName((String) basicInfo.get("spuName"));
         goodsInfo.setSpuDescription((String) basicInfo.get("spuDescription"));
-        goodsInfo.setCategoryId((Integer) basicInfo.get("categoryId"));
-        goodsInfo.setBrandId((Integer) basicInfo.get("brandId"));
-        goodsInfo.setWeight((Double) basicInfo.get("weight"));
+
+        // categoryId 和 brandId 也要兼容 Integer/String
+        Object categoryIdObj = basicInfo.get("categoryId");
+        if (categoryIdObj != null) {
+            goodsInfo.setCategoryId(Integer.parseInt(categoryIdObj.toString()));
+        }
+        Object brandIdObj = basicInfo.get("brandId");
+        if (brandIdObj != null) {
+            goodsInfo.setBrandId(Integer.parseInt(brandIdObj.toString()));
+        }
+
+        // weight 安全转换
+        Object weightObj = basicInfo.get("weight");
+        Double weightValue = 0.0;
+        if (weightObj != null) {
+            if (weightObj instanceof Number) {
+                weightValue = ((Number) weightObj).doubleValue();
+            } else {
+                try {
+                    weightValue = Double.parseDouble(weightObj.toString());
+                } catch (NumberFormatException e) {
+                    weightValue = 0.0;
+                }
+            }
+        }
+        goodsInfo.setWeight(weightValue);
+
         goodsInfo.setPublishStatus(0); // 初始状态为未发布
-        
+
         // 设置时间
         String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         goodsInfo.setCreateTime(now);
@@ -129,6 +153,7 @@ public class GoodsPublishServiceImpl implements IGoodsPublishService {
 
         return spuId;
     }
+
 
     @Override
     public boolean saveSpecInfo(GoodsPublishVO goodsPublishVO, Integer spuId) {

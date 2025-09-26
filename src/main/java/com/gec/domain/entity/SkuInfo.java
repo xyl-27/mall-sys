@@ -28,9 +28,9 @@ public class SkuInfo extends BaseEntity {
     private Integer saleCount;
 
     @TableField(exist = false)
-    private LocalDateTime createDateTime;
+    private LocalDateTime localCreateDate;
 
     @TableField(exist = false)
-    private LocalDateTime updateDateTime;
+    private LocalDateTime localUpdateDate;
 
 }
